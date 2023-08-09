@@ -1,7 +1,11 @@
 from django.shortcuts import render
 
-# Create your views here.
 from django.http import HttpResponse
+
+#importing forms
+from myapp.forms import userdata
+
+# Create your views here.
 
 def home(request):
     return HttpResponse("Welcome to little lemon restaurant")
@@ -21,3 +25,14 @@ def menuitems(request, dish):
         }
     description = items[dish]
     return HttpResponse(f"<h2> { dish } </h2> " + description)
+
+
+def collectdata(request):
+    form = userdata()
+    if request.method == "POST":
+        form = userdata(request.POST)
+        if form.is_valid():
+            form.save()
+    
+    context = {"form" : form}
+    return HttpResponse(request, "form.html", context)
